@@ -1,5 +1,3 @@
-
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -7,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -20,10 +19,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 public class DeliverySchedule extends JPanel{
+	private static JFrame	frame;
+	
+	private DecimalFormat df = new DecimalFormat("0.00");
+	
 	private JButton		cmdEditDelivery;
     private JButton     cmdClose;
     private JButton     cmdSortDeliveryDate;
-    private JButton     cmdSortDeliveryMethod;
     private JButton     cmdSortAddress;
     private JButton     cmdSortCusId;
     private JButton     cmdSortOrderCost;
@@ -37,8 +39,8 @@ public class DeliverySchedule extends JPanel{
     private JTable table;
     private DefaultTableModel model;
     
-    final File schedFile = new File("C:\\Users\\Peters\\eclipse-workspace\\T'Curly\\src\\deliverySched\\schedule.dat");
-    //Creates a file object using a predetermined data file
+    File schedFile = new File("schedule.txt");
+    //Creates a file object using a predetermined file
 
     public DeliverySchedule() {
         super(new GridLayout(2,1));
@@ -50,7 +52,6 @@ public class DeliverySchedule extends JPanel{
         deliverylist= loadSchedule(schedFile);
         String[] columnNames=  {"ID#",
         		"Delivery Date",
-        		//"Delivery Method",
         		"Address",
         		"Customer ID#",
                 "Order Cost"};
@@ -67,7 +68,6 @@ public class DeliverySchedule extends JPanel{
         
         cmdEditDelivery  = new JButton("Edit Delivery Record");
         cmdSortDeliveryDate  = new JButton("Sort by Delivery Date");
-        //cmdSortDeliveryMethod  = new JButton("Sort by Delivery Method");
         cmdSortAddress  = new JButton("Sort by Address");
         cmdSortCusId  = new JButton("Sort by Customer ID");
         cmdSortOrderCost  = new JButton("Sort by Order Cost");
@@ -75,7 +75,6 @@ public class DeliverySchedule extends JPanel{
 
         cmdEditDelivery.addActionListener(new EditDeliveryButtonListener());
         cmdSortDeliveryDate.addActionListener(new SortDeliveryDateButtonListener());
-        //cmdSortDeliveryMethod.addActionListener(new SortDeliveryMethodButtonListener());
         cmdSortAddress.addActionListener(new SortAddressButtonListener());
         cmdSortCusId.addActionListener(new SortCustomerIDButtonListener());
         cmdSortOrderCost.addActionListener(new SortOrderCostButtonListener());
@@ -83,7 +82,6 @@ public class DeliverySchedule extends JPanel{
         
         cmdEditDelivery.setBackground(Color.yellow);
         cmdSortDeliveryDate.setBackground(Color.white);
-        //cmdSortDeliveryMethod.setBackground(Color.white);
         cmdSortAddress.setBackground(Color.white);
         cmdSortCusId.setBackground(Color.white);
         cmdSortOrderCost.setBackground(Color.white);
@@ -92,7 +90,6 @@ public class DeliverySchedule extends JPanel{
         
         pnlCommand.add(cmdEditDelivery);
         pnlCommand.add(cmdSortDeliveryDate);
-        //pnlCommand.add(cmdSortDeliveryMethod);
         pnlCommand.add(cmdSortAddress);
         pnlCommand.add(cmdSortCusId);
         pnlCommand.add(cmdSortOrderCost);
@@ -111,14 +108,14 @@ public class DeliverySchedule extends JPanel{
     {
         String date= d.getDate();
         String address = d.getAddress();
-        String[] item={""+ d.getId(), date, address,""+ d.getCusId(),"" + d.getOrderCost()};
+        String[] item={""+ d.getId(), date, address,""+ d.getCusId(),"" + df.format(d.getOrderCost())};
         model.addRow(item);        
 
     }
 
     static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("Delivery Schedule");
+        JFrame frame = new JFrame("T'Curly Delivery Schedule");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
@@ -130,22 +127,6 @@ public class DeliverySchedule extends JPanel{
         frame.pack();
         frame.setVisible(true);
         
-    }
-
-    public static void main(String[] args) {
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    createAndShowGUI();
-                }
-            });
-    }
-
-    public void addPromoter (DeliveryRecord d)
-    {
-        deliverylist.add(d);
-        addToTable(d);
-
     }
 
     private ArrayList<DeliveryRecord> loadSchedule(File schedFile) //Extracts data as an arraylist
@@ -185,13 +166,6 @@ public class DeliverySchedule extends JPanel{
     	}
     }
     
-    /*public class SortDeliveryMethodButtonListener implements ActionListener{
-    	public void actionPerformed(ActionEvent e) {//listener for SortDeliveryMethod button, initiates when button is clicked
-    		Collections.sort(deliverylist);
-    		refresh(deliverylist);
-    	}
-    }*/
-    
     public class SortAddressButtonListener implements ActionListener{
     	public void actionPerformed(ActionEvent e) {//listener for SortAddress button, initiates when button is clicked
     		Collections.sort(deliverylist);
@@ -218,8 +192,8 @@ public class DeliverySchedule extends JPanel{
     {
         public void actionPerformed(ActionEvent e)//listener for Close button, initiates when button is clicked
         {
-        	System.exit(0);
-        
+        	MainMenu.createAndShowGUI();
+            thisList.setVisible(false);
         }
 
     }
@@ -274,5 +248,5 @@ class OrderCostSort implements Comparator<DeliveryRecord>{//used to help sort de
 			}
 		}
 	}
-	
 }
+

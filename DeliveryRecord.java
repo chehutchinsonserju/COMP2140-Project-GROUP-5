@@ -4,6 +4,10 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -15,8 +19,8 @@ import javax.swing.JTextField;
 public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>{
 	private String address, delivDate;
 	private double orderCost;
-	
-	private int id, cusId;
+	private DecimalFormat df = new DecimalFormat("0.00");
+	private int id, cusId, index;
 	private static int nextid =0;
 	
 	private JTextField  txtAddress;       //address
@@ -35,6 +39,7 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
     private DeliveryRecord d;
     private DeliverySchedule listing;
     private DeliveryScheduleEdit updater,updateWin;
+    File schedFile = new File("schedule.txt");
 	
 	
 	public DeliveryRecord (String date, String address, int cusId, double orderCost) {
@@ -46,6 +51,13 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
 		nextid++;
   	}
 	
+	public DeliveryRecord (int id,String date, String address, int cusId, double orderCost) {
+		this.delivDate = date;
+		this.address = address;
+		this.cusId = cusId;
+		this.orderCost = orderCost;
+		this.id = id;
+  	}
 	
 	public int getId()
 	{
@@ -99,36 +111,35 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
 	
 	public String toString()
 	{
-		return this.getId()+";"+this.delivDate+";"+this.address +";"+this.cusId+";"+this.orderCost;
+		return this.delivDate+" "+this.address +" "+this.cusId+" "+df.format(this.orderCost)+"\n";
 	}
 	
 	public static void resetId()
 	{
-		
 		nextid=0;
 	}
 	
 	
-	public void updateLocalData(int id, DeliveryScheduleEdit updater, DeliveryScheduleEdit updateWin, DeliverySchedule listing, ArrayList<DeliveryRecord> schedlist)
+	public void updateLocalData(int index, DeliveryScheduleEdit updater, DeliveryScheduleEdit updateWin, DeliverySchedule listing, ArrayList<DeliveryRecord> schedlist)
 	{
 		String currDate = getDate();
 		String currAddress = getAddress();
-		int currCusId = getCusId();
 		double currOrderCost = getOrderCost();
 		this.schedlist = schedlist;
 		this.updater = updater;
 		this.updateWin = updateWin;
 		this.listing = listing;
+		this.index = index;
 		d = this;
 		
-		setTitle("Updating Delivery");
+		setTitle("Updating Delivery Record");
 		
         pnlCommand = new JPanel();
         pnlDisplay = new JPanel();
         
         pnlDisplay.add(new JLabel(("Current delivery date: "+currDate+""))); 
         pnlDisplay.add(new JLabel(("Enter a new delivery date or leave blank to keep current date"))); 
-        txtDelivDate = new JTextField(20);
+        txtDelivDate = new JTextField(10);
         pnlDisplay.add(txtDelivDate);
         
         pnlDisplay.add(new JLabel(("Current address: "+currAddress+""))); 
@@ -137,7 +148,7 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
         pnlDisplay.add(txtAddress);
         
         pnlDisplay.add(new JLabel("Current order cost: "+currOrderCost+""));
-        pnlDisplay.add(new JLabel("Enter a new budget or leave blank to keep current order cost"));
+        pnlDisplay.add(new JLabel("Enter a new order cost or leave blank to keep current order cost"));
         txtOrderCost = new JTextField(9);
         pnlDisplay.add(txtOrderCost);
         
@@ -184,8 +195,18 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
             		orderCost = getOrderCost();
             	else
             		orderCost = Double.parseDouble(text);
-            	setAddress(address);
-            	setOrderCost(orderCost);
+            	txtAddress.setText("");
+            	txtDelivDate.setText("");
+            	txtOrderCost.setText("");
+            	try {
+            		BufferedWriter writer = new BufferedWriter(new FileWriter(schedFile,false));
+            		schedlist.set(index, new DeliveryRecord(id, delivDate, address, getCusId(),orderCost));
+            		listing.schedFile.delete();
+            		for (int i = 0; i < schedlist.size(); i++) {
+            			writer.write(schedlist.get(i).toString());
+            		}
+                    writer.close();
+            	}catch (Exception e1) {}
             	listing.refresh(schedlist);
         		d.setVisible(false); // close current window
         		

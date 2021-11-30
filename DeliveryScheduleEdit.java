@@ -61,7 +61,7 @@ private JTextField  txtID;
     public DeliveryScheduleEdit(int id,ArrayList<DeliveryRecord> schedlist, DeliverySchedule listing) {
     	int pdx = findDeliveryRecord(schedlist,id);
 		if (pdx>=0) {
-			schedlist.get(pdx).updateLocalData(id,updater,updateWin,listing,schedlist);
+			schedlist.get(pdx).updateLocalData(pdx,updater,updateWin,listing,schedlist);
 		}else {
 			pnlCommand = new JPanel();
 	        pnlDisplay = new JPanel();
@@ -101,7 +101,7 @@ private JTextField  txtID;
     {
         public void actionPerformed(ActionEvent e)
         {
-            updateWin.setVisible(false);
+            updateWin.dispose();
         }
 
     }
