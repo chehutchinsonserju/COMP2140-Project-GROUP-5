@@ -2,141 +2,89 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.io.File;
 import javax.swing.JButton;
 import java.awt.Color;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.AudioSystem;
 import java.awt.*;
 import javax.swing.*;
 
-/**
- * Features of AdminLogin:
- *   provides security against un-authorized users   
- */
 public class Lvl1Login extends JFrame{
 
-    private JPasswordField  txtPass;    //entered password
-    private String      password;       //correct password
-    private JButton     cmdPass;
-    private JButton     cmdClose;
-    private JButton     cmdClearAll;
-    private JPanel      pnlCommand;
-    private JPanel      pnlDisplay;
-    private JLabel      label;
-    private JLabel      instructions;
+    private JPasswordField  input; 
+    private String      password; 
+    private JButton     goBtn;
+    private JButton     returnBtn;
+    private JPanel      verify;
+    private JPanel      pane;
+    private JLabel      prompt;
+    Color lpink = (new  Color(250, 200, 250));
+    Color dblue = (new  Color(10, 10, 15));
+    Color dpink = (new  Color(255, 30, 75));
 
     Lvl1Login(){
         password = "lvl1";
-        setTitle("Administrator");
-        pnlCommand = new JPanel();
-        pnlDisplay = new JPanel();
-        instructions = new JLabel("Please Enter Administrator Password");
-        instructions.setForeground(Color.WHITE);
-        pnlDisplay.add(instructions); 
-        label = new JLabel("<html><br/Password: <html>");
-        label.setForeground(Color.WHITE);
-        pnlDisplay.add(label);
+        setTitle("Level 1");
+        verify = new JPanel();
+        pane = new JPanel();
+        prompt = new JLabel("Enter the Level 1 Password:");
+        prompt.setForeground(Color.WHITE);
+        pane.add(prompt); 
 
 
-        pnlDisplay.setBackground(new Color(15,17,22));
-        pnlCommand.setBackground(new Color(15,17,22));
+        pane.setBackground(dblue);
+        verify.setBackground(dblue);
 
 
-        pnlDisplay.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        txtPass = new JPasswordField(10);
-        txtPass.setEchoChar('*');
-        pnlDisplay.add(txtPass);
-        pnlDisplay.setLayout(new GridLayout(4,1));
+        pane.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
+        input = new JPasswordField();
+        
+        input.setEchoChar('*');
+        pane.add(input);
+        pane.setLayout(new GridLayout(3,1));
 
+        goBtn  = new JButton("Enter");
+        returnBtn = new JButton("Return");
 
-        //Create Icons For Buttons
-        Icon passicon = new ImageIcon("icons/unlockpasswordicon.png");
-        Icon closeicon = new ImageIcon("icons/exiticon.png");
+        goBtn.setBackground(lpink);
+        returnBtn.setBackground(lpink);
 
+        verify.add(goBtn);
+        verify.add(returnBtn);
 
-        //Create Buttons
-        cmdPass    = new JButton("Enter", passicon);
-        cmdClose   = new JButton("Back", closeicon);
-
-
-        //Set Background colour of Buttons
-        cmdPass.setBackground(new Color(226,228,233));
-        cmdClose.setBackground(new Color(221,55,78));
-
-
-        //Add Buttons to Screen
-        pnlCommand.add(cmdPass);
-        pnlCommand.add(cmdClose);
-
-
-        //Give Buttons ActionListeners
-        cmdPass.addActionListener(new PasswordButtonListener());
-        cmdClose.addActionListener(new BackButtonListener());
+        goBtn.addActionListener(new passwordButtonListener());
+        returnBtn.addActionListener(new returnButtonListener());
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-        this.setUndecorated(true); // <-- the title bar is removed here
-        add(pnlDisplay, BorderLayout.CENTER);
-        add(pnlCommand, BorderLayout.SOUTH);
+        this.setUndecorated(true);
+        add(pane, BorderLayout.CENTER);
+        add(verify, BorderLayout.SOUTH);
         pack();
         setResizable(false);
         this.setLocationRelativeTo(null);
         setVisible(true);
     }
 
-
-    public void playSound(String soundName)
-    {
-        try 
-        {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile( ));
-            Clip clip = AudioSystem.getClip( );
-            clip.open(audioInputStream);
-            clip.start( );
-        }
-        catch(Exception ex)
-        {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace( );
-        }
-    }
-
-
-    private class BackButtonListener implements ActionListener
+    private class passwordButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
-            playSound("sound_dir/button2.wav");
-            new EntryScreen();
-            setVisible(false);
-        }
-    }
 
-
-    private class PasswordButtonListener implements ActionListener
-    {
-        public void actionPerformed(ActionEvent e)
-        {
-            playSound("sound_dir/button2.wav");
-
-            //Check if password inputted is equal to correct password
-            if (String.valueOf(txtPass.getPassword()).equals(password)){
-                playSound("sound_dir/start2.wav");
+            if (String.valueOf(input.getPassword()).equals(password)){
                 MainMenu.createAndShowGUI();
                 setVisible(false);
             }else{
-                playSound("sound_dir/error.wav");
-                label.setText("<html><i><b></b></i>Password: <html>");
-                ImageIcon image = new ImageIcon("icons/erroricon.png");
-                JLabel label2 = new JLabel("<html><i><b>INCORRECT PASSWORD</b></i><html>", image, JLabel.NORTH_EAST);
-                label2.setForeground(Color.WHITE);
-                pnlDisplay.remove(label);
-                pnlDisplay.remove(txtPass);
-                pnlDisplay.add( label2, BorderLayout.WEST); 
-                pnlDisplay.add(label);
-                pnlDisplay.add(txtPass);
+                prompt.setText("Incorrect Password.");
+                pane.remove(input);
+                pane.add(input);
             }
+        }
+    }
+
+    private class returnButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            new EntryScreen();
+            setVisible(false);
         }
     }
 }

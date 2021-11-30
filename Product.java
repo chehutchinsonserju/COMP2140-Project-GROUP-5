@@ -11,6 +11,11 @@ public class Product {
 		this.stockCount = stockCount;
 	}
 	
+	public Product(String name){
+		this.name = name;
+		
+	}
+	
 	public String getPname() {
 		return name;
 		

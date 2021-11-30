@@ -65,7 +65,7 @@ public class EntryScreen extends JFrame{
         JLabel title = new JLabel("", JLabel.SOUTH_EAST);
         pnlCover.add(title, BorderLayout.NORTH); 
 
-        ImageIcon logo = new ImageIcon("icons/tcurly2b.png");
+        ImageIcon logo = new ImageIcon("icons/logo.png");
         JLabel label = new JLabel("", logo, JLabel.NORTH_EAST);
         pnlCover.add(label, BorderLayout.NORTH); 
         pnlCover.setBorder(new EmptyBorder(new Insets(20, 100, 0, 100)));

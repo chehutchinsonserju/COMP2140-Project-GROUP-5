@@ -1,4 +1,4 @@
-package deliverySched;
+
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -116,7 +116,7 @@ public class DeliverySchedule extends JPanel{
 
     }
 
-    private static void createAndShowGUI() {
+    static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("Delivery Schedule");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -7,11 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import deliverySched.DeliverySchedule;
 
 public class MainMenu extends JPanel{
 	private static JFrame		frame;
@@ -48,11 +48,12 @@ public class MainMenu extends JPanel{
         cmdDeliverySchedule  = new JButton("View Delivery Schedule");
         cmdClose   = new JButton("Close");
 
-        //cmdAddCustomer.addActionListener(new AddCustomerButtonListener());
-        //cmdEditCustomer.addActionListener(new EditCustomerButtonListener());
-        //cmdAddProduct.addActionListener(new AddProductButtonListener());
-        //cmdEditProduct.addActionListener(new EditProductButtonListener());
-        //cmdProcessOrder.addActionListener(new ProcessOrderButtonListener());
+        //button commands
+        cmdAddCustomer.addActionListener(new AddCustomerButtonListener());
+        cmdEditCustomer.addActionListener(new EditCustomerButtonListener());
+        cmdAddProduct.addActionListener(new AddProductButtonListener());
+        cmdEditProduct.addActionListener(new EditProductButtonListener());
+        cmdProcessOrder.addActionListener(new ProcessOrderButtonListener());
         cmdDeliverySchedule.addActionListener(new DeliveryScheduleButtonListener());
         cmdClose.addActionListener(new CloseButtonListener());
         
@@ -73,7 +74,12 @@ public class MainMenu extends JPanel{
         pnlCommand.add(cmdProcessOrder);
         pnlCommand.add(cmdDeliverySchedule);
         pnlCommand.add(cmdClose);
-       
+        
+        ////
+        
+        ImageIcon logo = new ImageIcon("icons/logosmall.png");
+        JLabel label = new JLabel("", logo, JLabel.NORTH_EAST);
+        add(label);
         add(pnlCommand);
         add(pnlDisplay);
     }
@@ -95,12 +101,15 @@ public class MainMenu extends JPanel{
     }
     
     public static void main(String[] args) {
-        new EntryScreen();
+        // new EntryScreen();
+        // AddProduct ap = new AddProduct();
+        // Product p = AddProduct.A
     }
     
     public class AddCustomerButtonListener implements ActionListener{
     	public void actionPerformed(ActionEvent e) { //listener for AddCustomer button, initiates when button is clicked
-    		//function_call();
+    		new AddCustomer().RegisterCustomer();
+            frame.setVisible(false);
     	}
     }
     
@@ -112,7 +121,8 @@ public class MainMenu extends JPanel{
     
     public class AddProductButtonListener implements ActionListener{
     	public void actionPerformed(ActionEvent e) {//listener for AddProductMethod button, initiates when button is clicked
-    		//function_call();
+    		new AddProduct();
+            frame.setVisible(false);
     	}
     }
     

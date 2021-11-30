@@ -33,12 +33,43 @@ public class AddProduct extends JFrame implements ActionListener {
       private JTextArea notify;
       
       File file = new File("Products.txt");
+      
+      
+    //Search
+      public Product pProductSearch(String pname) {
+        	  try{
+                  BufferedReader reader = new BufferedReader(new FileReader(file));
+                  String line;
+                  int i = 0;
+                  java.util.ArrayList<String> f_data = new ArrayList<String>();
+                  while((line = reader.readLine()) != null){
+                      
+                      f_data.add(line);
+                      
+                      String[] data = f_data.get(i).split("!");
+                      if(pname.equalsIgnoreCase(data[0])){
+                    	  
+                    	  Product fp = new Product(data[0],data[1],data[2],data[3],data[4]);
+                          return fp;
+                          
+                      }
+                      i = i + 1;
+                  }
+
+                  Product nfp = new Product("Not Found") ;
+                  return nfp;
+                  
+              }catch(Exception e){return new Product("Not Found");}
+        	  
+          }
+
+      //Search
 
       public AddProduct() {
     	  
     	  
 
-          setTitle("T’Curly Sales Manager");
+          setTitle("Tâ€™Curly Sales Manager");
           setBounds(300, 90, 900, 600);
           setDefaultCloseOperation(EXIT_ON_CLOSE);
           setResizable(false);
@@ -122,7 +153,7 @@ public class AddProduct extends JFrame implements ActionListener {
 
           submit = new JButton("Submit");
           submit.setFont(new Font("Arial", Font.PLAIN, 15));
-          submit.setBackground(new Color(204, 204, 255));
+          submit.setBackground(new Color(179, 179, 252));
           submit.setSize(100, 20);
           submit.setLocation(150, 400);
           submit.addActionListener(this);
@@ -130,7 +161,7 @@ public class AddProduct extends JFrame implements ActionListener {
           
           search = new JButton("Search");
           search.setFont(new Font("Arial", Font.PLAIN, 15));
-          search.setBackground(new Color(204, 204, 255));
+          search.setBackground(new Color(179, 179, 252));
           search.setSize(100, 20);
           search.setLocation(150, 450);
           search.addActionListener(this);
@@ -138,7 +169,7 @@ public class AddProduct extends JFrame implements ActionListener {
   
           reset = new JButton("Reset");
           reset.setFont(new Font("Arial", Font.PLAIN, 15));
-          reset.setBackground(new Color(204, 204, 255));
+          reset.setBackground(new Color(179, 179, 252));
           reset.setSize(100, 20);
           reset.setLocation(150, 500);
           reset.addActionListener(this);
@@ -271,8 +302,6 @@ public class AddProduct extends JFrame implements ActionListener {
                   String line;
                   int i = 0;
                   java.util.ArrayList<String> f_data = new ArrayList<String>();
-                  
-
                   while((line = reader.readLine()) != null){
                       
                       f_data.add(line);
