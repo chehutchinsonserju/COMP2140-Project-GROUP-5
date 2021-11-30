@@ -1,4 +1,4 @@
-import java.util.*;
+
 
 public class Product {
 	String name,brand, desc, price,stockCount;
@@ -42,7 +42,7 @@ public class Product {
 	
 	public String toString() {
 		return "Name: " + name + "\n" + "Brand: " + brand + "\n" + "Description: " 
-				+ desc + "\n" + "Price: " + price + "\n" +  stockCount;
+				+ desc + "\n" + "Price: " + price + "\n" + "Amount in stock: " +  stockCount;
 	}
 
 
