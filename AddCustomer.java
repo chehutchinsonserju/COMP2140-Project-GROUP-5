@@ -211,11 +211,12 @@ public class AddCustomer extends JFrame implements ActionListener{
           searchbar.setSize(190, 30);
           searchbar.setLocation(500, 440);
           container.add(searchbar);
-
-          backBtn= new JButton   ("  Return", backIcon);
           backIcon = new ImageIcon("icons/exit.png");
-          backBtn.setSize(100, 30);
-          backBtn.setLocation(700, 540);
+          backBtn= new JButton   ("", backIcon);
+          backBtn.addActionListener(new CloseButtonListener());
+          backBtn.setSize(100, 70);
+          backBtn.setBackground(lpink);
+          backBtn.setLocation(700, 500);
           container.add(backBtn);
 
         setVisible(true);
@@ -247,19 +248,19 @@ public class AddCustomer extends JFrame implements ActionListener{
                     notify.setText("The submitted last name is not valid. Only letters and certain symbols are permitted.");
                     lNameField.setBackground(lpink);
                 }else if (validateEmail(email) == false){
-                    notify.setText("The submitted email is not valid.");
+                    notify.setText("The submitted email is not valid. Please ensure you added the domain.");
                     emailField.setBackground(lpink);
                 }else if (validatePhone(pNum) == false){
                     notify.setText("The submitted phone number is not valid. Must be 7 or 10 digits and begin with valid digits.");
                     pNumField.setBackground(lpink);
                 }else if (validateAddress(address) == false){
-                    notify.setText("The submitted email is not valid. Please emsure you added the domain.");
+                    notify.setText("The submitted email is not valid. Please emsure you added the street and number.");
                     addressField.setBackground(lpink);
                 }else if (validateAge(Integer.valueOf(age)) == false){
                     notify.setText("The submitted age name is not valid. Please ensure it is an integer between 0 and 130.");
                     ageField.setBackground(lpink);
                 }else if (validateID(id) == false){
-                    notify.setText("The submitted ID name is not valid. Please ensure it includes a letter and");
+                    notify.setText("The submitted ID name is not valid. Please ensure it includes a letter or a number.");
                     idField.setBackground(lpink);
                 }else{
                     String blank ="";
@@ -272,7 +273,7 @@ public class AddCustomer extends JFrame implements ActionListener{
                     idField.setText(blank);
     
                     Customer c = new Customer(fName, lName, email, pNum, address, Integer.valueOf(age), id);
-                    System.out.println(c);////
+                    System.out.println(c);
                     
                     try{
                         BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
@@ -280,7 +281,6 @@ public class AddCustomer extends JFrame implements ActionListener{
             
                         writer.close();
                     }catch(Exception e){return;}
-                    ///////////
                 }
             }else if (event.getSource() == resetBtn){
                 String blank ="";
@@ -322,11 +322,6 @@ public class AddCustomer extends JFrame implements ActionListener{
                     notify.setText(SearchCustomer(id));
                   
                 }
-              //fix
-            }else if(event.getSource() == backBtn){
-
-                MainMenu.createAndShowGUI();
-                container.setVisible(false);
             }
         
             
@@ -494,7 +489,21 @@ public class AddCustomer extends JFrame implements ActionListener{
             System.out.println("Invalid ID");
             return false;
         }
+
+        
+
     }
+    public class CloseButtonListener implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)//listener for Close button, initiates when button is clicked
+        {
+        	MainMenu.createAndShowGUI();
+            container.setVisible(false);
+            dispose();
+        }
+
+    }
+
 
 
 
