@@ -115,8 +115,8 @@ public class DeliverySchedule extends JPanel{
 
     static void createAndShowGUI() {
         //Create and set up the window.
-        JFrame frame = new JFrame("T'Curly Delivery Schedule");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("T'Curly Delivery Schedule");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         //Create and set up the content pane.
         DeliverySchedule newContentPane = new DeliverySchedule();
@@ -193,7 +193,7 @@ public class DeliverySchedule extends JPanel{
         public void actionPerformed(ActionEvent e)//listener for Close button, initiates when button is clicked
         {
         	MainMenu.createAndShowGUI();
-            thisList.setVisible(false);
+            frame.dispose();
         }
 
     }
