@@ -427,9 +427,4 @@ public class SAM extends JFrame{ //SAM means Search and Modify
     public String getFP(){
     	return productSearch(getName());
     }
-    
-    public static void main(String[] args) {
-    	
-        new SAM();
-    }
 }
