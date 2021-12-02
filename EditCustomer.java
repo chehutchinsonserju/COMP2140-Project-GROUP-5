@@ -271,21 +271,30 @@ public class EditCustomer extends JFrame implements ActionListener
                 }
               
             if(event.getSource() == removeBtn){
-                File fileToBeModified = new File(Customers.txt);
-                        String oldContent = "";
-                        BufferedReader reader = new BufferedReader(new FileReader(Customers.txt));
-                        String line = reader.readLine();
-
-                            while (line != null)
+                        try
                         {
-                                oldContent = oldContent + line + System.lineSeparator();
-                                 line = reader.readLine();
+                
+                        String old = "";
+                        BufferedReader reader1 = new BufferedReader(new FileReader("Customers.txt"));
+                        
+                            String line1 = reader1.readLine();
+                       
+                            while (line1 != null)
+                        {
+                                old = old + line1 + System.lineSeparator();
+                                 line1 = reader1.readLine();
                         }
-                        String newContent = oldContent.replaceAll(""+firstname+lastname+cemail+phone+caddress+c_age+id,"");
-                        FileWriter writer = new FileWriter(Customers.txt);
-                        writer.write(newContent);
-                        reader.close();
-                        writer.close();   
+                        String new1 = old.replaceAll(""+firstname+lastname+cemail+phone+caddress+c_age+id,"");
+                        FileWriter writer1 = new FileWriter("Customers.txt");
+                        writer1.write(new1);
+                        reader1.close();
+                        writer1.close(); 
+                         }
+                        catch (IOException ioe)
+                        {
+                            ioe.printStackTrace();
+                        }
+
             }
 
     
@@ -367,9 +376,9 @@ public class EditCustomer extends JFrame implements ActionListener
                     
                     
                     try{
-                        File fileToBeModified = new File(Customers.txt);
+                       
                         String oldContent = "";
-                        BufferedReader reader = new BufferedReader(new FileReader(Customers.txt));
+                        BufferedReader reader = new BufferedReader(new FileReader("Customers.txt"));
                         String line = reader.readLine();
 
                             while (line != null)
@@ -378,7 +387,7 @@ public class EditCustomer extends JFrame implements ActionListener
                                  line = reader.readLine();
                         }
                         String newContent = oldContent.replaceAll(""+firstname+lastname+cemail+phone+caddress+c_age+id, c.getfName()+"!"+c.getlName()+"!"+c.getEmail()+"!"+c.getPhone()+"!"+c.getAddress()+"!"+c.getAge()+"!"+c.getID()+"\n");
-                        FileWriter writer = new FileWriter(Customers.txt);
+                        FileWriter writer = new FileWriter("Customers.txt");
                         writer.write(newContent);
                         reader.close();
                         writer.close();     
