@@ -5,12 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import java.util.*;
 import java.util.List;
 import java.io.File;
@@ -25,7 +19,7 @@ import java.io.IOException;
 import java.io.*;
 import java.awt.event.*;
 
-public class orderProcessing extends JFrame{
+public class orderProcessing extends JFrame implements ActionListener{
 
     private Scanner scan = new Scanner(System.in);
     static File file = new File("Invoices.txt");
@@ -38,18 +32,9 @@ public class orderProcessing extends JFrame{
 
     private JButton submitBtn;
     private JButton resetBtn;
-    private JButton searchBtn;
     private JButton backBtn;
     private Icon backIcon;
     private JTextArea notify;
-
-    
-    private JButton     cmdUpdate;
-    private JButton		cmdContinue;
-    private JButton     cmdClose;
-
-    private JPanel      pnlCommand;
-    private JPanel      pnlDisplay;
 
     Color lpink = (new  Color(250, 200, 250));
     Color dblue = (new  Color(10, 10, 15));
@@ -68,11 +53,25 @@ public class orderProcessing extends JFrame{
         custID.setForeground(lpink);
         container.add(custID);
         
+        custID = new JTextField();
+        custID.setFont(new Font("Arial", Font.PLAIN, 15));
+        custID.setBackground(Color.white);
+        custID.setSize(190, 20);
+        custID.setLocation(250, 100);
+        container.add(custID);
+
         prodLabel = new JLabel("Please enter the product for the sale");
         prod.setFont(new Font("Arial", Font.BOLD, 20));
         prod.setSize(150, 20);
         prod.setLocation(100, 100);
         prod.setForeground(lpink);
+        container.add(prod);
+
+        prod = new JTextField();
+        prod.setFont(new Font("Arial", Font.PLAIN, 15));
+        prod.setBackground(Color.white);
+        prod.setSize(190, 20);
+        prod.setLocation(250, 100);
         container.add(prod);
 
         submitBtn = new JButton("Submit");
@@ -81,7 +80,7 @@ public class orderProcessing extends JFrame{
           submitBtn.setBackground(lpink);
           submitBtn.setSize(340, 50);
           submitBtn.setLocation(100, 450);
-          submitBtn.addActionListener((ActionListener) this);
+          submitBtn.addActionListener(this);
           container.add(submitBtn);
   
           resetBtn = new JButton("Reset");
@@ -90,8 +89,19 @@ public class orderProcessing extends JFrame{
           resetBtn.setBackground(dpink);
           resetBtn.setSize(340, 50);
           resetBtn.setLocation(100, 520);
-          resetBtn.addActionListener((ActionListener) this);
+          resetBtn.addActionListener(this);
           container.add(resetBtn);
+
+          notify = new JTextArea();
+          notify.setFont(new Font("Arial", Font.PLAIN, 20));
+          notify.setSize(300, 320);
+          notify.setForeground(Color.white);
+          notify.setBackground(dblue2);
+          notify.setLocation(500, 100);
+          notify.setLineWrap(true);
+          notify.setEditable(false);
+          notify.setBorder(BorderFactory.createLineBorder(lpink));
+          container.add(notify);
 
           backIcon = new ImageIcon("icons/exit.png");
           backBtn= new JButton   ("", backIcon);
@@ -111,15 +121,15 @@ public class orderProcessing extends JFrame{
 
         if (event.getSource() == submitBtn){
 
-            String custID = custID.getText();
-            String prod = prod.getText();
+            String ID = custID.getText();
+            String pname = prod.getText();
             
             notify.setText("");
             
-            if (validateID(custID) == false){
+            if (validateID(ID) == false){
                 notify.setText("The submitted ID is not valid. Only letters and certain symbols are permitted.");
                 custID.setBackground(lpink);
-            }else if (validateName(prod) == false){
+            }else if (validateName(pname) == false){
                 notify.setText("The submitted product name is not valid. Only letters and certain symbols are permitted.");
                 prod.setBackground(lpink);
             }else{
@@ -150,14 +160,14 @@ public class orderProcessing extends JFrame{
                 
                 rdata.add(line);
                 
-                String[] dataFound = rdata.get(i).split("!");
-                if(input.equals(dataFound[6])){
-                    return ("Customer ID("+dataFound[6]+") Found\n----------------------------\n["
-                    +dataFound[0]+" "+dataFound[1]+
-                    "]\nEmail:\n-"+dataFound[2]+
-                    "\nTelephone:\n-"+dataFound[3]+
-                    "\nAddress:\n-"+dataFound[4]+
-                    "\nAge:\n-"+Integer.valueOf(dataFound[5]));
+                String[] custFound = rdata.get(i).split("!");
+                if(input.equals(custFound[6])){
+                    return ("Customer ID("+custFound[6]+") Found\n----------------------------\n["
+                    +custFound[0]+" "+custFound[1]+
+                    "]\nEmail:\n-"+custFound[2]+
+                    "\nTelephone:\n-"+custFound[3]+
+                    "\nAddress:\n-"+custFound[4]+
+                    "\nAge:\n-"+Integer.valueOf(custFound[5]));
                 }
                 i = i + 1;
             }
@@ -178,7 +188,18 @@ public class orderProcessing extends JFrame{
                 
                 rdata.add(line);
                 
-                //stuff
+                String[] prodFound = rdata.get(i).split("!");
+                if(input.equals(prodFound[1])){
+                    return ("Product Name:("+prodFound[1]+") Found\n----------------------------\n["
+                    +prodFound[0]+" "+prodFound[1]+
+                    "]\nBrand:\n-"+prodFound[2]+
+                    "\nDescription:\n-"+prodFound[3]+
+                    "\nPrice:\n-"+prodFound[4]+
+                    "\nAmount in Stock:\n-"+Integer.valueOf(prodFound[5]));
+                } 
+                i = i+1;
+
+
             }
             return ("No product with this ID was found.");
         }catch(Exception e){return ("No product with this ID was found.");}
@@ -219,8 +240,9 @@ public class orderProcessing extends JFrame{
             System.out.println("Invalid ID");
             return false;
         }
+    }
 
-    class CloseButtonListener implements ActionListener
+    public class CloseButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)//listener for Close button, initiates when button is clicked
         {
@@ -233,6 +255,10 @@ public class orderProcessing extends JFrame{
 
 
 }
+    
+ 
+
+
     
 
 
