@@ -52,8 +52,7 @@ public class EntryScreen extends JFrame{
         setLayout(new GridLayout(2,1));
         setSize(1000,1000);
 
-        //creating panels and their colours
-        // GridBagLayout gbl = new GridBagLayout();  
+        //creating panels and their colours 
         GridBagConstraints gbc = new GridBagConstraints(); 
         
         ///top half
@@ -202,5 +201,9 @@ public class EntryScreen extends JFrame{
             sfx("sfx/button.wav");
             System.exit(0);
         }
+    }
+    public static void main(String []args) {
+        new EntryScreen();
+        
     }
 }

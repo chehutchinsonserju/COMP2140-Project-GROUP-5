@@ -81,7 +81,7 @@ public class orderProcessing extends JFrame{
           submitBtn.setBackground(lpink);
           submitBtn.setSize(340, 50);
           submitBtn.setLocation(100, 450);
-          submitBtn.addActionListener(this);
+          submitBtn.addActionListener((ActionListener) this);
           container.add(submitBtn);
   
           resetBtn = new JButton("Reset");
@@ -90,7 +90,7 @@ public class orderProcessing extends JFrame{
           resetBtn.setBackground(dpink);
           resetBtn.setSize(340, 50);
           resetBtn.setLocation(100, 520);
-          resetBtn.addActionListener(this);
+          resetBtn.addActionListener((ActionListener) this);
           container.add(resetBtn);
 
           backIcon = new ImageIcon("icons/exit.png");
@@ -220,7 +220,7 @@ public class orderProcessing extends JFrame{
             return false;
         }
 
-    public class CloseButtonListener implements ActionListener
+    class CloseButtonListener implements ActionListener
     {
         public void actionPerformed(ActionEvent e)//listener for Close button, initiates when button is clicked
         {
