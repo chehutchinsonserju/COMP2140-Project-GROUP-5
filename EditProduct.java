@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,9 +21,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+
 public class EditProduct extends JFrame{ //SAM means Search and Modify
 
-	private AddProduct Aprod;
+	private AddProduct A;
 	
 	private Product fp;
 	private JFrame searchFrame;
@@ -77,6 +79,9 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     private JTextField searchbar;
     private JPanel searchPanel;
     private JLabel notification;
+    private String text;
+    private JLabel oldLabel;
+    private JPanel nPanel;
     //private ArrayList <Product> dat;
     
     File file = new File("Products.txt");
@@ -173,13 +178,49 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
         editFrame.setTitle("Product");
         editFrame.setVisible(false);
         editFrame.setResizable(false);
+
+
+
+        edit1Frame = new JFrame();
+        newGUI = new JPanel();
+        nPanel = new JPanel();
+        notification1 = new JLabel("What would you like to edit?");
+        nameButton = new JButton("Name");
+        nameButton.addActionListener(new nameButtonListener());
+        brandButton = new JButton("Brand");
+        brandButton.addActionListener(new brandButtonListener());
+        descButton = new JButton("Description");
+        descButton.addActionListener(new descButtonListener());
+        costButton = new JButton("Cost");
+        costButton.addActionListener(new costButtonListener());
+        amntButton = new JButton("Amount");
+        amntButton.addActionListener(new amntButtonListener());
+                	
+        nPanel.add(notification1,BorderLayout.CENTER);
+        newGUI.setLayout(new GridLayout(4, 4));
+        newGUI.add(nameButton);
+        newGUI.add(brandButton);
+        newGUI.add(descButton);
+        newGUI.add(costButton);
+        newGUI.add(amntButton);
+
+                	//newGui.add(backButton);
+                    //.add(buttonPanel,BorderLayout.PAGE_END);
+        edit1Frame.add(nPanel,BorderLayout.PAGE_START);
+        edit1Frame.add(newGUI,BorderLayout.PAGE_END);
+        edit1Frame.setBounds(100,100,300,150);
+        edit1Frame.setDefaultCloseOperation(3);
+        edit1Frame.pack();
+        edit1Frame.setResizable(false);
+        //System.out.println("What would you like to Edit?");
+        //System.out.println("name\nbrand\ndescription\ncost\namount");
     }
 
     private class CloseButtonListener implements ActionListener{
     	
         public void actionPerformed(ActionEvent e){
         	
-            searchFrame.dispose();
+            System.exit(0);
         }
     }    
     
@@ -187,8 +228,7 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     	
         public void actionPerformed(ActionEvent e){
         	
-            dispose();
-            
+            System.exit(0);
         }
     }    
 
@@ -213,6 +253,7 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
         		notification.setText("Text field is empty!!");
         	}
         	else {
+                text = searchbar.getText().trim();
         		searchbar.setText(null);
         	}
         }
@@ -232,8 +273,90 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     private class UpdateButtonListener implements ActionListener{
     	
     	public void actionPerformed(ActionEvent e) {
-    		//Aprod = new AddProduct();
-    		System.out.println(getFP());
+            if (NameBar.getText().isEmpty() == (false)){
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(NameBar.getText() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+
+                    writer.close();
+                }catch(Exception ex){return;}
+            }
+            else{
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    System.out.println("Name updated");
+                    writer.close();
+                }catch(Exception ex){return;}
+                
+            }
+
+            if (ABar.getText().isEmpty() == (false)){
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +ABar.getText() + "\n");
+
+                    writer.close();
+                }catch(Exception ex){return;}
+            }
+            else{
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,false));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    writer.close();
+                }catch(Exception ex){return;}
+                
+            }
+
+            if (BBar.getText().isEmpty() == (false)){
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(NameBar.getText() +"!"+ BBar.getText()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    writer.close();
+                }catch(Exception ex){return;}
+            }
+            else{
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    System.out.println("Name updated");
+                    writer.close();
+                }catch(Exception ex){return;}
+                
+            }
+
+            if (CBar.getText().isEmpty() == (false)){
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +CBar.getText()+ "!" +fp.getStockCount() + "\n");
+
+                    writer.close();
+                }catch(Exception ex){return;}
+            }
+            else{
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    System.out.println("Name updated");
+                    writer.close();
+                }catch(Exception ex){return;} 
+            }
+            if (DBar.getText().isEmpty() == (false)){
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +DBar.getText()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+
+                    writer.close();
+                }catch(Exception ex){return;}
+            }
+            else{
+                try{
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+                    writer.write(fp.getPname() +"!"+ fp.getPbrand()+ "!" +fp.getPdesc()+ "!" +fp.getPprice()+ "!" +fp.getStockCount() + "\n");
+                    System.out.println("Name updated");
+                    writer.close();
+                }catch(Exception ex){return;} 
+            }
     		
     	}
     }
@@ -245,12 +368,15 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     		NameFrame = new JFrame();
 	  		NamePanel = new JPanel();
 	  		NameBar = new JTextField(20);
+            oldLabel = new JLabel(getFP().name);
 	  		NameLabel = new JLabel(" Edit Name ");
 	  		
 	  		NamePanel.add(NameLabel);
+            NamePanel.add(oldLabel);
 	  		NamePanel.add(NameBar);
 	  		NameFrame.add(NamePanel);
 	  		NameFrame.add(button1Panel,BorderLayout.SOUTH);
+            NameFrame.setBounds(100,100,300,150);
 	  		NameFrame.setVisible(true);
     		
     	}
@@ -263,12 +389,15 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     		BFrame = new JFrame();
 	  		BPanel = new JPanel();
 	  		BBar = new JTextField(20);
+            oldLabel = new JLabel(getFP().brand);
 	  		BLabel = new JLabel(" Edit Brand ");
 	  		
 	  		BPanel.add(BLabel);
-	  		BPanel.add(BBar);
+	  		BPanel.add(oldLabel);
+            BPanel.add(BBar);
 	  		BFrame.add(BPanel);
 	  		BFrame.add(button1Panel,BorderLayout.SOUTH);
+            BFrame.setBounds(100,100,300,150);
 	  		BFrame.setVisible(true);
     		
     	}
@@ -281,12 +410,15 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     		DFrame = new JFrame();
 	  		DPanel = new JPanel();
 	  		DBar = new JTextField(20);
+            oldLabel = new JLabel(getFP().desc);
 	  		DLabel = new JLabel(" Edit Description ");
 	  		
 	  		DPanel.add(DLabel);
+            DPanel.add(oldLabel);
 	  		DPanel.add(DBar);
 	  		DFrame.add(DPanel);
 	  		DFrame.add(button1Panel,BorderLayout.SOUTH);
+            DFrame.setBounds(100,100,300,150);
 	  		DFrame.setVisible(true);
     		
     	}
@@ -299,12 +431,15 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     		CFrame = new JFrame();
 	  		CPanel = new JPanel();
 	  		CBar = new JTextField(20);
+            oldLabel = new JLabel(getFP().price);
 	  		CLabel = new JLabel(" Update Cost ");
 	  		
 	  		CPanel.add(CLabel);
+            CPanel.add(oldLabel);
 	  		CPanel.add(CBar);
 	  		CFrame.add(CPanel);
 	  		CFrame.add(button1Panel,BorderLayout.SOUTH);
+            CFrame.setBounds(100,100,300,150);
 	  		CFrame.setVisible(true);
     		
     	}
@@ -317,10 +452,11 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
     		AFrame = new JFrame();
 	  		APanel = new JPanel();
 	  		ABar = new JTextField(20);
+            oldLabel = new JLabel(getFP().stockCount);
 	  		ALabel = new JLabel(" Update Stock ");
 	  		
-	  		
 	  		APanel.add(ALabel);
+            ALabel.add(oldLabel);
 	  		APanel.add(ABar);
 	  		AFrame.add(APanel);
 	  		AFrame.add(button1Panel,BorderLayout.SOUTH);
@@ -348,7 +484,7 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
 	    return true;
 	}
     
-    public String productSearch(String p) {
+    public Product productSearch(String p) {
   	  try{
             BufferedReader read = new BufferedReader(new FileReader(file));
             String line;
@@ -364,44 +500,12 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
                 	
                 	//prompt ask user what they want to edit in another GUI
                 	//use buttons 1,2,3,4,5
-                	edit1Frame = new JFrame();
-                	newGUI = new JPanel();
-                	notification1 = new JLabel("What would you like to edit?");
-                	nameButton = new JButton("Name");
-                	nameButton.addActionListener(new nameButtonListener());
-                	brandButton = new JButton("Brand");
-                	brandButton.addActionListener(new brandButtonListener());
-                	descButton = new JButton("Description");
-                	descButton.addActionListener(new descButtonListener());
-                	costButton = new JButton("Cost");
-                	costButton.addActionListener(new costButtonListener());
-                	amntButton = new JButton("Amount");
-                	amntButton.addActionListener(new amntButtonListener());
                 	
-                	newGUI.add(notification1);
-                	newGUI.add(nameButton);
-                	newGUI.add(brandButton);
-                	newGUI.add(descButton);
-                	newGUI.add(costButton);
-                	newGUI.add(amntButton);
-                	
-                	
-                	
-                	
-                	//newGui.add(backButton);
-                	edit1Frame.add(newGUI);
-                	edit1Frame.setDefaultCloseOperation(3);
-                	System.out.println("What would you like to Edit?");
-                	System.out.println("name\nbrand\ndescription\ncost\namount");
                 	
                 	//if name.... create a gui that changes the name etc...
                 	
               	  	Product fp = new Product(data[0],data[1],data[2],data[3],data[4]);
-              	  	
-              	  	
 
-              	  //System.out.println(data);
-              	  
               	  notification.setText(" ");
               	  notify.setText(fp.toString());
               	  edit1Frame.setVisible(true);
@@ -409,8 +513,8 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
               	  
               	  
               	  read.close();
-              	  
-              	  return fp.toString();
+              	  return fp;
+              	  //return fp.toString();
                     
                 }
                 i = i + 1;
@@ -418,13 +522,14 @@ public class EditProduct extends JFrame{ //SAM means Search and Modify
             
             notification.setText("Product not found!");
             read.close();
-            return "Product not found!" ;
+            return null ;
         }catch(Exception ex){
-        	return "";
+        	return null;
         	}
   	  }
     
-    public String getFP(){
-    	return productSearch(getName());
+    public Product getFP(){
+    	return productSearch(text);
     }
+
 }
