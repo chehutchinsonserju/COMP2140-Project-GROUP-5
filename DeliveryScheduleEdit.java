@@ -30,6 +30,9 @@ private JTextField  txtID;
   
     public DeliveryScheduleEdit(ArrayList<DeliveryRecord> schedlist, DeliverySchedule listing)
     {
+    	updateWin = this;
+        updateWin.setBounds(300, 160, 600, 200);
+        
     	pnlCommand = new JPanel();
         pnlDisplay = new JPanel();
 		pnlDisplay.add(new JLabel("Please enter the ID of the delivery record to be updated:")); 
@@ -37,7 +40,6 @@ private JTextField  txtID;
         pnlDisplay.add(txtID);
         this.schedlist = schedlist;
         this.listing = listing;
-        updateWin = this;
         
         cmdContinue      = new JButton("Continue");
         cmdClose   = new JButton("Cancel");
@@ -65,8 +67,9 @@ private JTextField  txtID;
 		}else {
 			pnlCommand = new JPanel();
 	        pnlDisplay = new JPanel();
-	        pnlDisplay.add(new JLabel("Delivery Record with ID# "+id+ " not found.")); 
+	        pnlDisplay.add(new JLabel("Delivery Record not found or ID# is invalid.")); 
 	        this.updateWin = this;
+	        updateWin.setBounds(350, 200, 600, 200);
 	        
 	        cmdClose   = new JButton("Close");
 	     
@@ -108,9 +111,15 @@ private JTextField  txtID;
     
     private class ContinueButtonListener implements ActionListener{
     	public void actionPerformed(ActionEvent e) {
-    		updateWin.setVisible(false);
-    		int id = Integer.parseInt(txtID.getText());
-    		updater = new DeliveryScheduleEdit(id,schedlist,listing); //creates a new DeliveryScheduleEdit object to use for ID searching
+    		int id = -1;
+    		try {
+    			id = Integer.parseInt(txtID.getText());
+    		}catch (NumberFormatException ex) {
+    			updateWin.dispose();
+    			updater = new DeliveryScheduleEdit(-1,schedlist,listing);
+    		}
+    		updateWin.dispose();
+    		if (id != -1) {updater = new DeliveryScheduleEdit(id,schedlist,listing);} //creates a new DeliveryScheduleEdit object to use for ID searching
     	}
     }
 

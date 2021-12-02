@@ -46,6 +46,7 @@ public class DeliverySchedule extends JPanel{
         super(new GridLayout(2,1));
         thisList = this;
         
+        frame.setBounds(250, 150, 600, 200);
         pnlCommand = new JPanel();
         pnlDisplay = new JPanel();
 
@@ -57,6 +58,7 @@ public class DeliverySchedule extends JPanel{
                 "Order Cost"};
         model=new DefaultTableModel(columnNames,0);
         table = new JTable(model);
+        table.setEnabled(false);
         showTable(deliverylist);
 
         table.setPreferredScrollableViewportSize(new Dimension(600, deliverylist.size()*15 +50));
@@ -212,7 +214,17 @@ class DeliveryDateSort implements Comparator<DeliveryRecord>{//used to help sort
 
 	@Override
 	public int compare(DeliveryRecord d1, DeliveryRecord d2) {
-		return d1.getDate().compareTo(d2.getDate());
+		String[] date1 = d1.getDate().split("-");
+		String[] date2  = d2.getDate().split("-");
+		if (date1[2] != date2[2]) {
+			return date1[2].compareTo(date2[2]);
+		}else if (date1[1] != date2[1]) {
+				return date1[1].compareTo(date2[1]);
+			}else if (date1[0] != date2[0]) {
+					return date1[0].compareTo(date2[0]);
+				}else {
+					return 0;
+				}
 	}
 	
 }

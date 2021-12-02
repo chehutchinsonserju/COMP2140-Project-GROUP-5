@@ -29,6 +29,7 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
     private JTextField  txtOrderCost;        //order cost
     
     private JButton     cmdUpdate;
+    private JButton     cmdCancel;
     private JButton     cmdClose;
 
     private JPanel      pnlCommand;
@@ -36,9 +37,10 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
     
     private ArrayList<DeliveryRecord> schedlist;
     
-    private DeliveryRecord d;
+    private DeliveryRecord d, popUP;
     private DeliverySchedule listing;
     private DeliveryScheduleEdit updater,updateWin;
+    
     File schedFile = new File("schedule.txt");
 	
 	
@@ -131,6 +133,7 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
 		this.listing = listing;
 		this.index = index;
 		d = this;
+		d.setBounds(300, 160, 600, 200);
 		
 		setTitle("Updating Delivery Record");
 		
@@ -138,7 +141,7 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
         pnlDisplay = new JPanel();
         
         pnlDisplay.add(new JLabel(("Current delivery date: "+currDate+""))); 
-        pnlDisplay.add(new JLabel(("Enter a new delivery date or leave blank to keep current date"))); 
+        pnlDisplay.add(new JLabel(("Enter a new delivery date in the format (dd-mm-yyyy) or leave blank to keep current date"))); 
         txtDelivDate = new JTextField(10);
         pnlDisplay.add(txtDelivDate);
         
@@ -155,50 +158,111 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
         pnlDisplay.setLayout(new GridLayout(0,1));
        
         cmdUpdate      = new JButton("Update");
-        cmdClose   = new JButton("Close");
+        cmdCancel   = new JButton("Cancel");
         
         cmdUpdate.setBackground(Color.green);
-        cmdClose.setBackground(Color.red);
+        cmdCancel.setBackground(Color.red);
         
         cmdUpdate.addActionListener(new UpdateButtonListener());
-        cmdClose.addActionListener(new CloseButtonListener()); 
+        cmdCancel.addActionListener(new CloseButtonListener()); 
 
         pnlCommand.add(cmdUpdate);
-        pnlCommand.add(cmdClose);
+        pnlCommand.add(cmdCancel);
         add(pnlDisplay, BorderLayout.CENTER);
         add(pnlCommand, BorderLayout.SOUTH);
         pack();
         setVisible(true);
 	}
 	
+	public boolean validateDate(String date) {
+		int[] dateArr = new int[3];
+		if (date.length() == 10) {
+			String[] dateNumbers = date.split("-");
+			System.out.print(dateNumbers);
+			for (int i = 0; i<dateNumbers.length; i++) {
+				try {
+					dateArr[i] = Integer.parseInt(dateNumbers[i]);
+				}catch (NumberFormatException e) {}
+			}
+			if ((dateArr[0]>0 && dateArr[0]<32) && (dateArr[1] == 1 || dateArr[1] == 3 || dateArr[1] == 5 || 
+					dateArr[1] == 7 || dateArr[1] == 8 || dateArr[1] == 10 || dateArr[1] == 12)) {
+				return true;
+			}
+			else if ((dateArr[0]>0 && dateArr[0]<31) && (dateArr[1] == 4 || dateArr[1] == 6 || dateArr[1] == 9 || 
+					dateArr[1] == 11)) {
+				return true;
+			}else if ((dateArr[0]>0 && dateArr[0]<29) && (dateArr[1] == 2) || 
+					(dateArr[0]>0 && dateArr[0]<30) && (dateArr[1] == 2 && dateArr[2]%4 == 0 && dateArr[2]%100 != 0)) {
+				
+			}else {
+				return false;
+			}
+		}
+		return false;
+	}
 	
+	private DeliveryRecord(String input) {
+		pnlCommand = new JPanel();
+        pnlDisplay = new JPanel();
+        pnlDisplay.add(new JLabel("Invalid "+input+" input format.")); 
+        this.popUP = this;
+        popUP.setBounds(350, 200, 600, 200);
+        
+        cmdClose   = new JButton("Close");
+     
+        cmdClose.setBackground(Color.white);
+        
+        
+        cmdClose.addActionListener(new CloseButtonListener()); 
+
+        pnlCommand.add(cmdClose);
+        
+        add(pnlDisplay, BorderLayout.CENTER);
+        add(pnlCommand, BorderLayout.SOUTH);
+        pack();
+        setVisible(true);
+	}
 	
 	private class CloseButtonListener implements ActionListener
     {
-        public void actionPerformed(ActionEvent e)
+        public void actionPerformed(ActionEvent a)
         {
-            d.setVisible(false);
+        	if (a.getSource() == cmdCancel)
+        		d.dispose();
+        	else
+        		popUP.dispose();
+        		
         }
 
     }
 	
 	private class UpdateButtonListener implements ActionListener{
-    	public void actionPerformed(ActionEvent e) { //listener for Update button, initiates when button is clicked
+    	public void actionPerformed(ActionEvent a) { //listener for Update button, initiates when button is clicked
     		String delivDate = txtDelivDate.getText(), address = txtAddress.getText(), text = txtOrderCost.getText(); // storing text field values
-    		double orderCost;
-        	try {
+    		double orderCost = -1;
         		if (delivDate.equals(""))
         			delivDate = getDate();
-        		if (address.equals(""))
-            		address = getAddress();
-            	if (text.equals(""))
+        		else if (validateDate(delivDate) == false) 
+        			new DeliveryRecord("date");
+        		
+        		if (text.equals(""))
             		orderCost = getOrderCost();
             	else
-            		orderCost = Double.parseDouble(text);
+            		try {
+            			orderCost = Double.parseDouble(text);
+            		}catch (NumberFormatException ex) {
+            			new DeliveryRecord("order cost");
+            		}
+        		
+        		if (address.equals(""))
+            		address = getAddress();
+        		
             	txtAddress.setText("");
             	txtDelivDate.setText("");
             	txtOrderCost.setText("");
-            	try {
+            	
+            	if (validateDate(delivDate) == true && orderCost > -1) 
+            	try{
             		BufferedWriter writer = new BufferedWriter(new FileWriter(schedFile,false));
             		schedlist.set(index, new DeliveryRecord(id, delivDate, address, getCusId(),orderCost));
             		listing.schedFile.delete();
@@ -206,12 +270,9 @@ public class DeliveryRecord extends JFrame implements Comparable<DeliveryRecord>
             			writer.write(schedlist.get(i).toString());
             		}
                     writer.close();
-            	}catch (Exception e1) {}
-            	listing.refresh(schedlist);
-        		d.setVisible(false); // close current window
-        		
-        	}catch (NumberFormatException ex){}
-        		
+                    listing.refresh(schedlist);
+            		d.dispose(); // close current window
+            	}catch (Exception e) {}
         }
     }
 }
