@@ -128,7 +128,9 @@ public class MainMenu extends JPanel{
     
     public class EditProductButtonListener implements ActionListener{
     	public void actionPerformed(ActionEvent e) {//listener for EditProduct button, initiates when button is clicked
-    		//function_call();
+    		new SAM();
+		frame.setVisible(false);
+		//function_call();
     	}
     }
     
